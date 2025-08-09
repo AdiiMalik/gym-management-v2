@@ -164,15 +164,19 @@ export const deleteMember = async (req, res) => {
 // };
 
 export const getMemberProfile = async (req, res) => {
+  console.log("👉 req.user.id:", req.user?.id);
+
   try {
     const member = await Member.findOne({ userId: req.user.id }).populate('userId');
 
-    if (!member) {
-      return res.status(404).json({
-        success: false,
-        message: 'Your profile has not been created yet. Please contact the gym admin.',
-      });
-    }
+  if (!member) {
+  return res.status(200).json({
+    success: false,
+    notFound: true,
+    message: 'Your profile has not been created yet. Please contact the gym admin.',
+  });
+}
+
 
     res.status(200).json({
       success: true,
@@ -181,7 +185,7 @@ export const getMemberProfile = async (req, res) => {
         id: member._id,
         name: member.name,
         email: member.email,
-        role: member.userId.role, // from User model
+        role: member.userId.role,
         phone: member.phone,
         age: member.age,
         membershipType: member.membershipType,
