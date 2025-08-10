@@ -44,7 +44,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: [
     'http://localhost:5173', // Your Vite frontend
-    'https://gym-dashboard-project.netlify.app' // Your production frontend
+    // 'https://gym-dashboard-project.netlify.app' // Your production frontend
+    'https://gym-managment-adi.netlify.app'
   ],
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
   credentials: true
