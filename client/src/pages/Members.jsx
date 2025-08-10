@@ -218,6 +218,122 @@
 
 // export default Members;
 
+// import React, { useEffect, useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { getMembers, deleteMember } from '../api/memberApi.js';
+// import MemberForm from '../components/MemberForm.jsx';
+
+// const Members = () => {
+//   const [members, setMembers] = useState([]);
+//   const [search, setSearch] = useState('');
+//   const [editingMember, setEditingMember] = useState(null);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const token = localStorage.getItem('token');
+//     if (!token) navigate('/login');
+//   }, [navigate]);
+
+//   const fetchMembers = async () => {
+//     try {
+//       const data = await getMembers();
+//       setMembers(data);
+//     } catch (error) {
+//       console.error("❌ Failed to fetch members:", error);
+//     }
+//   };
+
+//   const handleDelete = async (id) => {
+//     await deleteMember(id);
+//     fetchMembers();
+//   };
+
+//   useEffect(() => {
+//     fetchMembers();
+//   }, []);
+
+//   const getMembershipRowColor = (type) => {
+//     switch (type?.toLowerCase()) {
+//       case 'silver':
+//         return 'bg-green-50';
+//       case 'gold':
+//         return 'bg-blue-50';
+//       case 'premium':
+//         return 'bg-yellow-50';
+//       default:
+//         return 'bg-white';
+//     }
+//   };
+
+//   return (
+//     <div className="p-6 md:p-10 bg-gray-50 min-h-screen">
+//       <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-gray-700">🎯 Manage Members</h2>
+
+//       <MemberForm
+//         member={editingMember}
+//         onMemberAdded={fetchMembers}
+//         clearEditingMember={() => setEditingMember(null)}
+//       />
+
+//       <input
+//         type="text"
+//         placeholder="Search by name or email"
+//         className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-md p-3 mb-6 w-full shadow-sm"
+//         value={search}
+//         onChange={(e) => setSearch(e.target.value)}
+//       />
+
+//       <div className="overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
+//         <table className="w-full text-left">
+//           <thead className="bg-gray-100">
+//             <tr>
+//               <th className="p-4 font-medium text-gray-600">Name</th>
+//               <th className="p-4 font-medium text-gray-600">Email</th>
+//               <th className="p-4 font-medium text-gray-600">Phone</th>
+//               <th className="p-4 font-medium text-gray-600">Membership</th>
+//               <th className="p-4 font-medium text-gray-600">Actions</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {members
+//               .filter((m) =>
+//                 m.name.toLowerCase().includes(search.toLowerCase()) ||
+//                 m.email.toLowerCase().includes(search.toLowerCase())
+//               )
+//               .map((m) => (
+//                 <tr
+//                   key={m._id}
+//                   className={`transition border-b last:border-b-0 hover:bg-gray-50 ${getMembershipRowColor(m.membershipType)}`}
+//                 >
+//                   <td className="p-4">{m.name}</td>
+//                   <td className="p-4">{m.email}</td>
+//                   <td className="p-4">{m.phone}</td>
+//                   <td className="p-4 capitalize">{m.membershipType}</td>
+//                   <td className="p-4 space-x-2">
+//                     <button
+//                       onClick={() => setEditingMember(m)}
+//                       className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md transition"
+//                     >
+//                       Edit
+//                     </button>
+//                     <button
+//                       onClick={() => handleDelete(m._id)}
+//                       className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition"
+//                     >
+//                       Delete
+//                     </button>
+//                   </td>
+//                 </tr>
+//               ))}
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Members;
+//////////////////////////////////////////////////////////////////////////////rensponsive///////////////////////////////
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMembers, deleteMember } from '../api/memberApi.js';
@@ -266,8 +382,10 @@ const Members = () => {
   };
 
   return (
-    <div className="p-6 md:p-10 bg-gray-50 min-h-screen">
-      <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-gray-700">🎯 Manage Members</h2>
+    <div className="p-4 sm:p-6 md:p-10 bg-gray-50 min-h-screen">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-6 text-gray-700">
+        🎯 Manage Members
+      </h2>
 
       <MemberForm
         member={editingMember}
@@ -284,7 +402,7 @@ const Members = () => {
       />
 
       <div className="overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
-        <table className="w-full text-left">
+        <table className="w-full text-left min-w-[700px]">
           <thead className="bg-gray-100">
             <tr>
               <th className="p-4 font-medium text-gray-600">Name</th>
@@ -309,19 +427,21 @@ const Members = () => {
                   <td className="p-4">{m.email}</td>
                   <td className="p-4">{m.phone}</td>
                   <td className="p-4 capitalize">{m.membershipType}</td>
-                  <td className="p-4 space-x-2">
-                    <button
-                      onClick={() => setEditingMember(m)}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md transition"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(m._id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition"
-                    >
-                      Delete
-                    </button>
+                  <td className="p-4">
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <button
+                        onClick={() => setEditingMember(m)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md transition text-sm"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(m._id)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition text-sm"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
