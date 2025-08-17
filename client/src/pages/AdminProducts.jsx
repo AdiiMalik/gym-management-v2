@@ -148,7 +148,7 @@ export default function AdminProducts() {
       <div className="flex items-center space-x-4">
         {product.imageURL && (
           <img
-            src={`http://localhost:5000${product.imageURL}`}
+            src={`${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`}
             alt={product.name}
             className="w-24 h-24 object-contain rounded border"
           />

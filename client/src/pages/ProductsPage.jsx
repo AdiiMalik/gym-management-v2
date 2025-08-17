@@ -579,7 +579,7 @@ export default function ProductsPage({ inModal = false }) {
 
   // Fetch products
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Failed to load products", err))
@@ -659,7 +659,7 @@ export default function ProductsPage({ inModal = false }) {
           >
             {product.imageURL && (
               <img
-                src={`http://localhost:5000${product.imageURL}`}
+                src={`${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`}
                 alt={product.name}
                 className="w-full h-52 object-contain bg-gray-100 p-4"
               />
