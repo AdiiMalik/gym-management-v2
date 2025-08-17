@@ -146,13 +146,15 @@ export default function AdminProducts() {
     >
       {/* Product info */}
       <div className="flex items-center space-x-4">
-        {product.imageURL && (
-          <img
-            src={`${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`}
-            alt={product.name}
-            className="w-24 h-24 object-contain rounded border"
-          />
-        )}
+      <img
+  src={
+    product.imageURL
+      ? `${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`
+      : "https://via.placeholder.com/150"
+  }
+  alt={product.name || "Product Image"}
+  className="w-full h-52 object-contain bg-gray-100 p-4"
+/>
         <div>
           <h3 className="font-semibold text-lg">{product.name}</h3>
           <p className="text-gray-600 text-sm">{product.description}</p>
