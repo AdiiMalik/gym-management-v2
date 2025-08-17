@@ -578,19 +578,13 @@ export default function ProductsPage({ inModal = false }) {
   const { cart, setCart, addToCart } = useCart();
 
   // Fetch products
-useEffect(() => {
-  const url = `${import.meta.env.VITE_API_BASE_URL}/products`;
-  console.log("Fetching:", url);
-  fetch(url)
-    .then((res) => {
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.json();
-    })
-    .then((data) => setProducts(data))
-    .catch((err) => console.error("Failed to load products", err))
-    .finally(() => setLoading(false));
-}, []);
-
+  useEffect(() => {
+    fetch("http://localhost:5000/api/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.error("Failed to load products", err))
+      .finally(() => setLoading(false));
+  }, []);
 
   // Hide close button after delay (if not in modal)
   useEffect(() => {
@@ -663,24 +657,13 @@ useEffect(() => {
             key={product._id}
             className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl hover:scale-[1.02] transform transition flex flex-col"
           >
-            {/* {product.imageURL && ( */}
-            {/* <img
-                src={`${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`}
+            {product.imageURL && (
+              <img
+                src={`http://localhost:5000${product.imageURL}`}
                 alt={product.name}
                 className="w-full h-52 object-contain bg-gray-100 p-4"
-              /> */}
-            {/* )} */}
-            <img
-              src={
-                product.imageURL
-                  ? `${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`
-                  : "https://via.placeholder.com/150"
-              }
-              alt={product.name}
-              className="w-full h-52 object-contain bg-gray-100 p-4"
-            />
-
-
+              />
+            )}
             <div className="p-5 flex flex-col flex-1">
               <h2 className="text-lg font-semibold text-gray-800 truncate">
                 {product.name}
@@ -708,7 +691,7 @@ useEffect(() => {
         <CartPage cart={cart} closeCart={closeCart} setCart={setCart} />
       )}
 
-
+     
     </div>
   );
 }
