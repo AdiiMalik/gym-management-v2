@@ -578,13 +578,19 @@ export default function ProductsPage({ inModal = false }) {
   const { cart, setCart, addToCart } = useCart();
 
   // Fetch products
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/products`)
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((err) => console.error("Failed to load products", err))
-      .finally(() => setLoading(false));
-  }, []);
+useEffect(() => {
+  const url = `${import.meta.env.VITE_API_BASE_URL}/products`;
+  console.log("Fetching:", url);
+  fetch(url)
+    .then((res) => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then((data) => setProducts(data))
+    .catch((err) => console.error("Failed to load products", err))
+    .finally(() => setLoading(false));
+}, []);
+
 
   // Hide close button after delay (if not in modal)
   useEffect(() => {
