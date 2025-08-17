@@ -579,7 +579,7 @@ export default function ProductsPage({ inModal = false }) {
 
   // Fetch products
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Failed to load products", err))
@@ -657,13 +657,24 @@ export default function ProductsPage({ inModal = false }) {
             key={product._id}
             className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl hover:scale-[1.02] transform transition flex flex-col"
           >
-            {product.imageURL && (
-              <img
-                src={`http://localhost:5000${product.imageURL}`}
+            {/* {product.imageURL && ( */}
+            {/* <img
+                src={`${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`}
                 alt={product.name}
                 className="w-full h-52 object-contain bg-gray-100 p-4"
-              />
-            )}
+              /> */}
+            {/* )} */}
+            <img
+              src={
+                product.imageURL
+                  ? `${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`
+                  : "https://via.placeholder.com/150"
+              }
+              alt={product.name}
+              className="w-full h-52 object-contain bg-gray-100 p-4"
+            />
+
+
             <div className="p-5 flex flex-col flex-1">
               <h2 className="text-lg font-semibold text-gray-800 truncate">
                 {product.name}
@@ -691,7 +702,7 @@ export default function ProductsPage({ inModal = false }) {
         <CartPage cart={cart} closeCart={closeCart} setCart={setCart} />
       )}
 
-     
+
     </div>
   );
 }
