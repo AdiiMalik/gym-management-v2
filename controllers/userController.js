@@ -347,74 +347,92 @@ export const registerMember = async (req, res) => {
 //     res.status(500).json({ message: 'Internal error', error: error.message });
 //   }
 // };
-export const loginMember = async (req, res) => {
-  try {
-    const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
 
-    if (!user || user.role !== 'member') {
-      return res.status(401).json({ message: 'Invalid credentials or not a member' });
-    }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: 'Incorrect password' });
-
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    res.status(200).json({
-      token,
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        status: user.status || 'active',
-        mustChangePassword: user.mustChangePassword || false, // ✅ ADD THIS LINE
-      },
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Internal error', error: error.message });
-  }
-};
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // export const loginMember = async (req, res) => {
-//   const { email, password } = req.body;
-
 //   try {
-//     const member = await Member.findOne({ email });
+//     const { email, password } = req.body;
 
-//     if (!member) {
-//       return res.status(404).json({ message: "Member not found" });
+//     const user = await User.findOne({ email });
+
+//     if (!user || user.role !== 'member') {
+//       return res.status(401).json({ message: 'Invalid credentials or not a member' });
 //     }
 
-//     const isMatch = await bcrypt.compare(password, member.password);
-//     if (!isMatch) {
-//       return res.status(401).json({ message: "Invalid password" });
-//     }
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) return res.status(401).json({ message: 'Incorrect password' });
 
 //     const token = jwt.sign(
-//       { id: member._id, role: member.role },
+//       { id: user._id, role: user.role },
 //       process.env.JWT_SECRET,
-//       { expiresIn: "1h" }
+//       { expiresIn: '1h' }
 //     );
 
-//     res.json({ token });
+//     res.status(200).json({
+//       token,
+//       user: {
+//         _id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         role: user.role,
+//         status: user.status || 'active',
+//         mustChangePassword: user.mustChangePassword || false, // ✅ ADD THIS LINE
+//       },
+//     });
 //   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Server error" });
+//     res.status(500).json({ message: 'Internal error', error: error.message });
 //   }
 // };
 
-// ✅ General Login (Admin or Superadmin)
-// controllers/userController.js
 
 
-export const loginUser = async (req, res) => {
+// export const loginUser = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     const user = await User.findOne({ email });
+
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(401).json({ message: 'Invalid credentials' });
+//     }
+
+//     // 🔥 FIXED: Only block login if status is 'pending'
+//     if ((user.role === 'admin' || user.role === 'superadmin') && user.status === 'pending') {
+//       return res.status(403).json({ message: 'Your admin request is still pending approval.' });
+//     }
+
+//     // ✅ Login allowed
+//     const token = jwt.sign(
+//       { userId: user._id, role: user.role },
+//       process.env.JWT_SECRET,
+//       { expiresIn: '1d' }
+//     );
+
+//     return res.status(200).json({
+//       message: 'Login successful',
+//       token,
+//       user: {
+//         _id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         role: user.role,
+//         status: user.status,
+//       },
+//     });
+//   } catch (error) {
+//     console.error('Login error:', error);
+//     return res.status(500).json({ message: 'Server error during login' });
+//   }
+// };
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -429,18 +447,27 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // 🔥 FIXED: Only block login if status is 'pending'
-    if ((user.role === 'admin' || user.role === 'superadmin') && user.status === 'pending') {
-      return res.status(403).json({ message: 'Your admin request is still pending approval.' });
+    // ✅ Role-based login rules
+    if (user.role === 'member') {
+      // Member login check
+      // (No pending check here — unless you want to add)
+    } else if (user.role === 'admin' || user.role === 'superadmin') {
+      // 🔥 Block if admin/superadmin is pending
+      if (user.status === 'pending') {
+        return res.status(403).json({ message: 'Your admin request is still pending approval.' });
+      }
+    } else {
+      return res.status(401).json({ message: 'Unauthorized role' });
     }
 
-    // ✅ Login allowed
+    // ✅ Generate token
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
+    // ✅ Send back user data
     return res.status(200).json({
       message: 'Login successful',
       token,
@@ -449,11 +476,13 @@ export const loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        status: user.status,
+        status: user.status || 'active',
+        mustChangePassword: user.mustChangePassword || false,
       },
     });
+
   } catch (error) {
     console.error('Login error:', error);
-    return res.status(500).json({ message: 'Server error during login' });
+    return res.status(500).json({ message: 'Server error during login', error: error.message });
   }
 };
