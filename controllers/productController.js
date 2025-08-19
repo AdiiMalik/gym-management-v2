@@ -11,7 +11,8 @@ export const addProduct = async (req, res) => {
       category,
       price,
       stock,
-      imageURL: req.file ? `/uploads/${req.file.filename}` : null
+     imageURL: req.file ? `/uploads/${req.file.filename}` : null
+     
     });
 
     await product.save();

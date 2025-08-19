@@ -658,12 +658,8 @@ export default function ProductsPage({ inModal = false }) {
             className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl hover:scale-[1.02] transform transition flex flex-col"
           >
             <img
-              src={
-                product.imageURL
-                  ? `${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`
-                  : "https://via.placeholder.com/150"
-              }
-              alt={product.name || "Product Image"}
+              src={`https://resulting-dorisa-adimaliktech-91dff55d.koyeb.app${product.imageURL}`}
+              alt={product.name}
               className="w-full h-52 object-contain bg-gray-100 p-4"
             />
             <div className="p-5 flex flex-col flex-1">
