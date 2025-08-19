@@ -147,7 +147,7 @@ export default function AdminProducts() {
             {/* Product info */}
             <div className="flex items-center space-x-4">
               <img
-                src={`${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`}
+                src={`https://resulting-dorisa-adimaliktech-91dff55d.koyeb.app${product.imageURL}`}
                 alt={product.name}
                 className="w-full h-52 object-contain bg-gray-100 p-4"
               />
