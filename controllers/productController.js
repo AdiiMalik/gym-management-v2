@@ -1,9 +1,31 @@
 import Product from "../models/Product.model.js";
 
 // Add new product
+// export const addProduct = async (req, res) => {
+//   try {
+//     const { name, description, category, price, stock } = req.body;
+
+//     const product = new Product({
+//       name,
+//       description,
+//       category,
+//       price,
+//       stock,
+//      imageURL: req.file ? `/uploads/${req.file.filename}` : null
+     
+//     });
+
+//     await product.save();
+//     res.status(201).json(product);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 export const addProduct = async (req, res) => {
   try {
     const { name, description, category, price, stock } = req.body;
+
+    const baseURL = process.env.BASE_URL || "";
 
     const product = new Product({
       name,
@@ -11,13 +33,13 @@ export const addProduct = async (req, res) => {
       category,
       price,
       stock,
-     imageURL: req.file ? `/uploads/${req.file.filename}` : null
-     
+      imageURL: req.file ? `${baseURL}/uploads/${req.file.filename}` : null,
     });
 
     await product.save();
     res.status(201).json(product);
   } catch (error) {
+    console.error("Error adding product:", error);
     res.status(500).json({ message: error.message });
   }
 };
