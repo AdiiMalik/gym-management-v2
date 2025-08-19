@@ -39,6 +39,9 @@ import saleRoutes from "./routes/saleRoutes.js";
 import path from "path";
 import fs from "fs";
 dotenv.config();
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -48,7 +51,6 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 // Enhanced CORS configuration
 app.use(cors({
   origin: [
@@ -60,6 +62,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // Updated Routes - removed '/api' prefix to match frontend
 app.use('/api/members', memberRoutes);
@@ -71,14 +74,14 @@ app.use("/api/products", productRoutes);
 app.use("/api/sales", saleRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('✅ MongoDB Connected');
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-  })
-  .catch((err) => {
-    console.error('❌ MongoDB connection error:', err);
-    process.exit(1); // Exit if DB connection fails
-  });
+.then(() => {
+  console.log('✅ MongoDB Connected');
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+})
+.catch((err) => {
+  console.error('❌ MongoDB connection error:', err);
+  process.exit(1); // Exit if DB connection fails
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {
