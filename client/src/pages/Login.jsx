@@ -694,55 +694,7 @@ const Login = ({ showLogin, onClose }) => {
     }
   }, [user, navigate]);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (isLoading) return;
-  //   setIsLoading(true);
 
-  //   try {
-  //     const response = await loginApi({ email, password });
-  //     const loggedInUser = response?.user;
-
-  //     if (!loggedInUser) throw new Error("User object is missing from response");
-
-  //     if (loggedInUser.role === 'member') {
-  //       toast.error('❌ Please use the Member Login Page.');
-  //       setIsLoading(false);
-  //       return;
-  //     }
-
-  //     if (loggedInUser.role === 'admin' && loggedInUser.status === 'pending') {
-  //       if (!localStorage.getItem("rejectedNotified")) {
-  //         toast.error('❌ Superadmin has not approved your account yet.');
-  //         localStorage.setItem("rejectedNotified", "true");
-  //       }
-  //       setIsLoading(false);
-  //       return;
-  //     }
-
-  //     localStorage.setItem('token', response.token);
-  //     localStorage.setItem('user', JSON.stringify(loggedInUser));
-  //     setUser(loggedInUser);
-  //     localStorage.removeItem("rejectedNotified");
-
-  //     toast.success('✅ Login successful');
-
-  //     if (loggedInUser.mustChangePassword) {
-  //       toast('Please change your password to continue', { icon: '⚠️' });
-  //       navigate('/change-password');
-  //       return;
-  //     }
-
-  //     if (loggedInUser.role === 'superadmin') navigate('/superadmin');
-  //     else if (loggedInUser.role === 'admin') navigate('/members');
-
-  //   } catch (error) {
-  //     const errMsg = error?.response?.data?.message || error.message || 'Login failed. Please try again.';
-  //     toast.error(errMsg);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (isLoading) return;

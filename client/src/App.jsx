@@ -963,7 +963,7 @@ const AppContent = () => {
               element={
                 <Login
                   showLogin={true}
-                  onClose={() => navigate("/members")}
+                  onClose={() => navigate("/")}
                 />
               }
             />

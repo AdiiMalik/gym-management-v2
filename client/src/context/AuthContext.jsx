@@ -58,37 +58,106 @@
 // }
 
 // export const useAuth = () => useContext(AuthContext);
+/////////////////////////////////////////////////////////////////////////////////////////////////19/8
+
+// import { createContext, useContext, useState, useEffect } from 'react';
+// import { login as authLogin } from '../api/authApi'; // Correctly import API function
+
+// const AuthContext = createContext();
+
+// export function AuthProvider({ children }) {
+//   const [user, setUser] = useState(null);
+//   const [loading, setLoading] = useState(true);
+
+//   const login = async ({ email, password }) => {
+//   try {
+//     const res = await authLogin({ email, password }); // ✅ Use correct API
+//     const { token, user } = res.data;
+
+//     setUser(user);
+//     localStorage.setItem('token', token);
+//     localStorage.setItem('user', JSON.stringify(user)); // ✅ Save user to localStorage
+//     return { token, user };
+//   } catch (error) {
+//     console.error('Login error:', error?.message || error);
+//     throw error;
+//   }
+// };
+
+
+//   const logout = () => {
+//     setUser(null);
+//     localStorage.removeItem('token');
+//     localStorage.removeItem('user');
+//   };
+
+//   useEffect(() => {
+//     const token = localStorage.getItem('token');
+//     const storedUser = localStorage.getItem('user');
+
+//     if (token && storedUser) {
+//       setUser(JSON.parse(storedUser));
+//     }
+//     setLoading(false); // Important to unblock UI
+//   }, []);
+
+//   return (
+//    <AuthContext.Provider
+//   value={{
+//     user,
+//     setUser, 
+//     login,
+//     logout,
+//     loading,
+//     isAuthenticated: !!user,
+//   }}
+// >
+    
+//       {!loading && children}
+//     </AuthContext.Provider>
+//   );
+// }
+
+// export const useAuth = () => useContext(AuthContext);
 
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { login as authLogin } from '../api/authApi'; // Correctly import API function
+import { useNavigate } from 'react-router-dom';
+import { login as authLogin } from '../api/authApi.js';
+import axiosInstance from '../api/axiosInstance.js';
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); // 👈
 
   const login = async ({ email, password }) => {
-  try {
-    const res = await authLogin({ email, password }); // ✅ Use correct API
-    const { token, user } = res.data;
+    try {
+      const res = await authLogin({ email, password });
+      const { token, user: userData } = res.data;
 
-    setUser(user);
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user)); // ✅ Save user to localStorage
-    return { token, user };
-  } catch (error) {
-    console.error('Login error:', error?.message || error);
-    throw error;
-  }
-};
+      setUser(userData);
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(userData));
 
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      return { token, user: userData };
+    } catch (error) {
+      console.error('Login error:', error?.message || error);
+      throw error;
+    }
+  };
 
-  const logout = () => {
+   const logout = () => {
     setUser(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    delete axiosInstance.defaults.headers.common["Authorization"];
+    
+    navigate("/"); // ✅ redirect to home after logout
   };
 
   useEffect(() => {
@@ -96,28 +165,32 @@ export function AuthProvider({ children }) {
     const storedUser = localStorage.getItem('user');
 
     if (token && storedUser) {
-      setUser(JSON.parse(storedUser));
+      const decoded = jwtDecode(token);
+      if (decoded.exp * 1000 > Date.now()) {
+        setUser(JSON.parse(storedUser));
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      } else {
+        logout();
+      }
     }
-    setLoading(false); // Important to unblock UI
+    setLoading(false);
   }, []);
 
   return (
-   <AuthContext.Provider
-  value={{
-    user,
-    setUser, 
-    login,
-    logout,
-    loading,
-    isAuthenticated: !!user,
-  }}
->
-    
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        login,
+        logout,
+        loading,
+        isAuthenticated: !!user,
+      }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );
 }
 
 export const useAuth = () => useContext(AuthContext);
-
 
