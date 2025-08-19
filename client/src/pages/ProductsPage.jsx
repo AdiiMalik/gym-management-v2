@@ -651,38 +651,48 @@ export default function ProductsPage({ inModal = false }) {
       </h1>
 
       {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-24">
-        {products.map((product) => (
-          <div
-            key={product._id}
-            className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl hover:scale-[1.02] transform transition flex flex-col"
-          >
-            <img
-              src={`https://resulting-dorisa-adimaliktech-91dff55d.koyeb.app${product.imageURL}`}
-              alt={product.name}
-              className="w-full h-52 object-contain bg-gray-100 p-4"
-            />
-            <div className="p-5 flex flex-col flex-1">
-              <h2 className="text-lg font-semibold text-gray-800 truncate">
-                {product.name}
-              </h2>
-              <p className="text-gray-500 mt-1 text-sm line-clamp-2">
-                {product.detail || product.description}
-              </p>
-              <p className="font-bold mt-3 text-xl text-green-600">
-                ${product.price.toFixed(2)}
-              </p>
-
-              <button
-                onClick={() => handleAddToCart(product)}
-                className="mt-3 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              >
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        ))}
+     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-24">
+  {products.map((product) => (
+    <div
+      key={product._id}
+      className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 flex flex-col"
+    >
+      {/* Image Section */}
+      <div className="w-full h-56 flex items-center justify-center bg-gray-100">
+        <img
+          src={`${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}${product.imageURL}`}
+          alt={product.name}
+          className="max-h-full max-w-full object-contain p-4"
+        />
       </div>
+
+      {/* Content Section */}
+      <div className="p-5 flex flex-col flex-1">
+        <h2 className="text-lg font-semibold text-gray-800 text-center truncate">
+          {product.name}
+        </h2>
+        <p className="text-gray-500 mt-2 text-sm text-center line-clamp-2">
+          {product.detail || product.description}
+        </p>
+
+        <div className="mt-4 flex items-center justify-center">
+          <p className="font-bold text-xl text-green-600">
+            ${product.price.toFixed(2)}
+          </p>
+        </div>
+
+        {/* Button */}
+        <button
+          onClick={() => handleAddToCart(product)}
+          className="mt-5 w-full bg-red-500 text-white py-2.5 rounded-xl font-medium hover:bg-red-600 transition"
+        >
+          Buy Now
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
 
       {/* Cart Modal */}
       {showCart && (

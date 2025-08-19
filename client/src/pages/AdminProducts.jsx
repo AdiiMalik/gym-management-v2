@@ -136,46 +136,50 @@ export default function AdminProducts() {
         )}
       </form>
 
-      <h2 className="text-xl font-bold mb-4">Products List</h2>
-      {products.length === 0 && <p>No products found.</p>}
-      <ul className="space-y-4">
-        {products.map(product => (
-          <li
-            key={product._id}
-            className="flex justify-between items-center bg-white shadow p-4 rounded"
-          >
-            {/* Product info */}
-            <div className="flex items-center space-x-4">
-              <img
-                src={`https://resulting-dorisa-adimaliktech-91dff55d.koyeb.app${product.imageURL}`}
-                alt={product.name}
-                className="w-full h-52 object-contain bg-gray-100 p-4"
-              />
-              <div>
-                <h3 className="font-semibold text-lg">{product.name}</h3>
-                <p className="text-gray-600 text-sm">{product.description}</p>
-                <p className="font-bold">${product.price.toFixed(2)}</p>
-              </div>
-            </div>
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">Products List</h2>
+{products.length === 0 && <p className="text-gray-500">No products found.</p>}
+<ul className="grid gap-6">
+  {products.map((product) => (
+    <li
+      key={product._id}
+      className="flex justify-between items-center bg-white shadow-md p-6 rounded-2xl hover:shadow-lg transition-all"
+    >
+      {/* Product info */}
+      <div className="flex items-center space-x-6">
+        <img
+          src={`${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}${product.imageURL}`}
+          alt={product.name}
+          className="w-36 h-36 object-contain rounded-xl bg-gray-50 p-2"
+        />
+        <div className="flex flex-col">
+          <h3 className="font-semibold text-lg text-gray-900">{product.name}</h3>
+          <p className="text-gray-600 text-sm mt-1 line-clamp-2 max-w-md">
+            {product.description}
+          </p>
+          <p className="font-bold text-green-600 mt-3 text-lg">
+            ${product.price.toFixed(2)}
+          </p>
+        </div>
+      </div>
 
-            {/* Action buttons */}
-            <div className="flex space-x-2">
-              <button
-                onClick={() => startEdit(product)}
-                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 text-sm"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(product._id)}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm"
-              >
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {/* Action buttons */}
+      <div className="flex space-x-3">
+        <button
+          onClick={() => startEdit(product)}
+          className="bg-yellow-500 text-white px-4 py-2 rounded-xl hover:bg-yellow-600 text-sm shadow"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => handleDelete(product._id)}
+          className="bg-red-600 text-white px-4 py-2 rounded-xl hover:bg-red-700 text-sm shadow"
+        >
+          Delete
+        </button>
+      </div>
+    </li>
+  ))}
+</ul>
 
     </div>
   );
