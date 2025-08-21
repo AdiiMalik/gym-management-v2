@@ -383,7 +383,7 @@ export default function AdminProducts() {
                   {product.description}
                 </p>
                 <p className="font-bold text-green-600 mt-3 text-lg">
-                  ${product.price.toFixed(2)}
+                  Rs.{product.price.toFixed(2)}
                 </p>
                 <p className="text-gray-800 font-medium mt-1">Stock: {product.stock}</p> {/* ✅ show current stock */}
               </div>

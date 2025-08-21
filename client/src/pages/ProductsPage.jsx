@@ -677,7 +677,7 @@ export default function ProductsPage({ inModal = false }) {
 
         <div className="mt-4 flex items-center justify-center">
           <p className="font-bold text-xl text-green-600">
-            ${product.price.toFixed(2)}
+            Rs.{product.price.toFixed(2)}
           </p>
         </div>
 

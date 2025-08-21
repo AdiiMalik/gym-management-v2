@@ -253,12 +253,12 @@ export default function CartPage({ cart = [], setCart, closeCart, fetchProducts,
         `<tr>
           <td>${item.name}</td>
           <td align="center">${item.qty}</td>
-          <td align="right">$${(item.price * item.qty).toFixed(2)}</td>
+          <td align="right">Rs.${(item.price * item.qty).toFixed(2)}</td>
         </tr>`
       );
     });
     receiptWindow.document.write('</table><hr>');
-    receiptWindow.document.write(`<h3>Total: $${total.toFixed(2)}</h3>`);
+    receiptWindow.document.write(`<h3>Total: Rs.${total.toFixed(2)}</h3>`);
     receiptWindow.document.close();
     receiptWindow.print();
   };
@@ -330,7 +330,7 @@ export default function CartPage({ cart = [], setCart, closeCart, fetchProducts,
                 <div key={item._id} className="flex justify-between items-center bg-gray-50 shadow p-4 rounded-lg">
                   <div>
                     <h2 className="font-semibold">{item.name}</h2>
-                    <p>${item.price} x {item.qty}</p>
+                    <p>Rs.{item.price} x {item.qty}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -358,7 +358,7 @@ export default function CartPage({ cart = [], setCart, closeCart, fetchProducts,
             </div>
 
             <div className="mt-4 border-t pt-4">
-              <h2 className="text-xl font-bold mb-2">Total: ${total.toFixed(2)}</h2>
+              <h2 className="text-xl font-bold mb-2">Total: Rs.{total.toFixed(2)}</h2>
               <select
                 value={selectedPaymentMethod}
                 onChange={(e) => setSelectedPaymentMethod(e.target.value)}

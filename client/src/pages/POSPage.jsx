@@ -611,7 +611,7 @@ const handleDeleteSale = async (saleId) => {
   className="h-32 w-full object-contain mb-2"
 />
             <h2 className="font-semibold">{product.name}</h2>
-            <p>Price: ${product.price}</p>
+            <p>Price: Rs.{product.price}</p>
             <p>Stock: {product.stock}</p>
             <div className="flex gap-2 mt-2">
               <input
