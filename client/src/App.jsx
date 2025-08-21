@@ -893,7 +893,7 @@ import LandingPage from "./pages/LandingPage";
 // ✅ POS Pages
 import ProductsPage from "./pages/ProductsPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
-
+import POSPage from "./pages/POSPage";
 const AppContent = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -971,7 +971,7 @@ const AppContent = () => {
             <Route path="/login-member" element={<MemberLogin />} />
             <Route path="/" element={<LandingPage />} />
             <Route path="/choose-role" element={<ChooseRole />} />
-
+            <Route path="/pos" element={<POSPage />} />
             {/* Member */}
             <Route
               path="/member-dashboard"

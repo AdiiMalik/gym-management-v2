@@ -651,7 +651,7 @@ export default function ProductsPage({ inModal = false }) {
       </h1>
 
       {/* Products Grid */}
-     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-24">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-24">
   {products.map((product) => (
     <div
       key={product._id}
@@ -681,17 +681,27 @@ export default function ProductsPage({ inModal = false }) {
           </p>
         </div>
 
-        {/* Button */}
-        <button
-          onClick={() => handleAddToCart(product)}
-          className="mt-5 w-full bg-red-500 text-white py-2.5 rounded-xl font-medium hover:bg-red-600 transition"
-        >
-          Buy Now
-        </button>
+        {/* Stock & Button */}
+        {product.stock > 0 ? (
+          <button
+            onClick={() => handleAddToCart(product)}
+            className="mt-5 w-full bg-red-500 text-white py-2.5 rounded-xl font-medium hover:bg-red-600 transition"
+          >
+            Buy Now
+          </button>
+        ) : (
+          <button
+            disabled
+            className="mt-5 w-full bg-gray-400 text-white py-2.5 rounded-xl font-medium cursor-not-allowed"
+          >
+            Sold Out
+          </button>
+        )}
       </div>
     </div>
   ))}
 </div>
+
 
 
       {/* Cart Modal */}

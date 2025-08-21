@@ -44,16 +44,15 @@ export const addProduct = async (req, res) => {
   }
 };
 
-// Get all products
+// ✅ Get all products
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
-    res.json(products);
+    res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error fetching products", error });
   }
 };
-
 // Update product by ID
 export const updateProduct = async (req, res) => {
   try {

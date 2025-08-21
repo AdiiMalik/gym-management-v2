@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import { addProduct, getProducts, updateProduct, deleteProduct } from "../controllers/productController.js";
-
+import { sellProduct } from "../controllers/SellProductController.js";
 const router = express.Router();
 
 // Multer storage config
@@ -22,5 +22,5 @@ router.post("/", upload.single("image"), addProduct);
 router.get("/", getProducts);
 router.put("/:id", upload.single("image"), updateProduct);
 router.delete("/:id", deleteProduct);
-
+router.post("/:id/sell", sellProduct);
 export default router;
